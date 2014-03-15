@@ -66,12 +66,16 @@ gulp.task 'jade', ->
     # .pipe connect.reload()
 
 gulp.task 'vendor', ->
-  gulp.src 'bower_components/foundation/js/foundation.min.js'
-    .pipe gulp.dest './build/js/vendor/foundation'
+  # copy vendor files
   gulp.src 'bower_components/foundation/js/foundation/*.js'
     .pipe gulp.dest './build/js/vendor/foundation/foundation'
   gulp.src 'bower_components/foundation/js/vendor/*.js'
     .pipe gulp.dest './build/js/vendor'
+  # combine jquery and foundation together
+  gulp.src ['bower_components/foundation/js/vendor/jquery.js', 'bower_components/foundation/js/foundation.min.js']
+    .pipe concat('jquery-foundation.js')
+    .pipe gulp.dest './build/js/vendor/foundation'
+
 
 gulp.task 'connect', connect.server
   root: './build'
