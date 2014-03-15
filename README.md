@@ -15,7 +15,7 @@ You'll need to have the following items installed before continuing.
 ## Quickstart
 
 ```bash
-git clone git@github.com:yangliu/foundation-libsass-gulp-template.git
+git clone git@github.com:yangliu/foundation-libsass-jade-coffee-gulp-template.git
 npm install && bower install
 ```
 
