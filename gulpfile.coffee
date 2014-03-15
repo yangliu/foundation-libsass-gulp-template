@@ -12,6 +12,7 @@ rename     = require 'gulp-rename'
 concat     = require 'gulp-concat'
 connect    = require 'gulp-connect'
 jshint     = require 'gulp-jshint'
+coffeelint = require 'gulp-coffeelint'
 tempus     = require 'tempusjs'
 fs         = require 'fs'
 pkg        = require './package.json'
@@ -24,13 +25,17 @@ gulp.task 'lint', ->
     .pipe jshint()
     .pipe jshint.reporter 'default'
 
+  gulp.src '.src/coffee/*.coffee'
+    .pipe coffeelint()
+    .pipe coffeelint.reporter()
+
 gulp.task 'sass', ->
   gulp.src './src/sass/*.scss'
     .pipe sass
       includePaths: ['bower_components/foundation/scss']
     .pipe cssmin()
     .pipe gulp.dest './build/css'
-    # .pipe connect.reload()
+    .pipe connect.reload()
 
 gulp.task 'coffee', ->
   gulp.src './src/coffee/*.coffee'
@@ -42,7 +47,7 @@ gulp.task 'scripts', ['coffee'], ->
     .pipe concat 'app.js'
     .pipe uglify()
     .pipe gulp.dest './build/js'
-    # .pipe connect.reload()
+    .pipe connect.reload()
 
 gulp.task 'jade', ->
   jade_data = {}
@@ -63,7 +68,7 @@ gulp.task 'jade', ->
     .pipe minifyHTML()
     .pipe header banner
     .pipe gulp.dest './build'
-    # .pipe connect.reload()
+    .pipe connect.reload()
 
 gulp.task 'vendor', ->
   # copy vendor files
@@ -80,11 +85,12 @@ gulp.task 'vendor', ->
 gulp.task 'connect', connect.server
   root: './build'
   port: 8000
-  livereload: false
+  livereload:
+    port: 35729
 
 gulp.task 'watch', ['connect', 'lint', 'sass', 'scripts', 'jade', 'vendor'], ->
   gulp.watch ['src/jade/*.jade'], ['jade']
-  gulp.watch ['src/coffee/*.coffee', 'src/js/*.js'], ['scripts']
+  gulp.watch ['src/coffee/*.coffee', 'src/js/*.js'], ['lint', 'scripts']
   gulp.watch ['src/sass/*.sass'], ['sass']
   gulp.watch ['bower_components/foundation/js/foundation.min.js'], ['vendor']
   gulp.watch ['bower_components/foundation/js/foundation/*.js'], ['vendor']
