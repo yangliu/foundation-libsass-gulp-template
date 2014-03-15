@@ -1,5 +1,5 @@
 {
-  "name": "foundation-libsass-template",
+  "name": "foundation-libsass-jade-coffee-gulp-template",
   "version": "0.0.2",
   "devDependencies": {
     "node-sass": "~0.7.0",
